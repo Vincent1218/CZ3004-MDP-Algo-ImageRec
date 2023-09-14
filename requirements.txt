@@ -16,6 +16,7 @@ seaborn>=0.11.0
 imutils~=0.5.4
 python-tsp
 Flask>=2.0.1
+Flask-Cors==4.0.0
 gunicorn>=20.1.0
 
 # absl-py==1.4.0
