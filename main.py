@@ -2,7 +2,7 @@ import time
 from algo.algo import MazeSolver 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from model import *
+# from model import *
 from helper import command_generator
 
 def create_app():
@@ -97,7 +97,7 @@ def create_app():
 
         ## Week 9 ## 
         # We don't need to pass in the signal anymore
-        image_id = predict_image_week_9(filename,model)
+        # image_id = predict_image_week_9(filename,model)
 
         # Return the obstacle_id and image_id
         result = {
@@ -112,9 +112,9 @@ def create_app():
         """
         This is the main endpoint for the stitching command. Stitches the images using two different functions, in effect creating two stitches, just for redundancy purposes
         """
-        img = stitch_image()
+        # img = stitch_image()
         img.show()
-        img2 = stitch_image_own()
+        # img2 = stitch_image_own()
         img2.show()
         return jsonify({"result": "ok"})
 
