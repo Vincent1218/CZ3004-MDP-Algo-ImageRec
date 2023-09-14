@@ -110,7 +110,7 @@ class MazeSolver:
         distance = 1e9
         optimal_path = []
 
-        #print(f"Inside get_optimal_order_dp: retrying = {retrying}")
+        # print(f"Inside get_optimal_order_dp: retrying = {retrying}")
         # Get all possible positions that can view the obstacles
         all_view_positions = self.grid.get_view_obstacle_positions(retrying)
         #print(f"all_view_positions: {all_view_positions}")
@@ -432,3 +432,5 @@ class MazeSolver:
 
 if __name__ == "__main__":
     pass
+
+
