@@ -5,6 +5,7 @@ from flask_cors import CORS
 # from model import *
 from helper import command_generator
 
+
 def create_app():
     app = Flask(__name__)
     CORS(app)
@@ -61,10 +62,10 @@ def create_app():
                 continue
             if command.startswith("FIN"):
                 continue
-            elif command.startswith("FW") or command.startswith("FS"):
-                i += int(command[2:]) // 10
-            elif command.startswith("BW") or command.startswith("BS"):
-                i += int(command[2:]) // 10
+            elif command.startswith("f") or command.startswith("FS"):
+                i += int(command[1:]) // 10
+            elif command.startswith("b") or command.startswith("BS"):
+                i += int(command[1:]) // 10
             else:
                 i += 1
             path_results.append(optimal_path[i].get_dict())
@@ -120,7 +121,7 @@ def create_app():
 
     return app
 
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=5001, debug=True)
+# if __name__ == '__main__':   
+#     app.run(host='0.0.0.0', port=5000, debug=True)
 
 
