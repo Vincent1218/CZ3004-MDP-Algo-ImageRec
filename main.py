@@ -2,7 +2,7 @@ import time
 from algo.algo import MazeSolver 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-# from model import *
+from model import *
 from helper import command_generator
 
 
@@ -10,8 +10,8 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
 
-    #model = load_model()
-    model = None
+    model = load_model()
+    # model = None
     @app.route('/status', methods=['GET'])
     def status():
         """
@@ -32,6 +32,8 @@ def create_app():
 
         # Get the obstacles, big_turn, retrying, robot_x, robot_y, and robot_direction from the json data
         obstacles = content['obstacles']
+        print("obstacles in main.py", obstacles)
+        print("obstacles type:",type(obstacles))
         #  = ibig_turnnt(content['big_turn'])
         retrying = content['retrying']
         robot_x, robot_y = content['robot_x'], content['robot_y']
@@ -93,8 +95,8 @@ def create_app():
         obstacle_id = constituents[1]
 
         ## Week 8 ## 
-        #signal = constituents[2].strip(".jpg")
-        #image_id = predict_image(filename, model, signal)
+        signal = constituents[2].strip(".jpg")
+        image_id = predict_image(filename, model, signal)
 
         ## Week 9 ## 
         # We don't need to pass in the signal anymore
@@ -113,10 +115,10 @@ def create_app():
         """
         This is the main endpoint for the stitching command. Stitches the images using two different functions, in effect creating two stitches, just for redundancy purposes
         """
-        # img = stitch_image()
+        img = stitch_image()
         img.show()
         # img2 = stitch_image_own()
-        img2.show()
+        # img2.show()
         return jsonify({"result": "ok"})
 
     return app
