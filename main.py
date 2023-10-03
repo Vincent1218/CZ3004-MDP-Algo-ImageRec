@@ -29,11 +29,12 @@ def create_app():
         """
         # Get the json data from the request
         content = request.json
+        print("received algo request from RPi: ", content)
 
         # Get the obstacles, big_turn, retrying, robot_x, robot_y, and robot_direction from the json data
         obstacles = content['obstacles']
-        print("obstacles in main.py", obstacles)
-        print("obstacles type:",type(obstacles))
+        # print("obstacles in main.py", obstacles)
+        # print("obstacles type:",type(obstacles))
         #  = ibig_turnnt(content['big_turn'])
         retrying = content['retrying']
         robot_x, robot_y = content['robot_x'], content['robot_y']

@@ -32,6 +32,7 @@ def load_model():
     """
     #model = torch.hub.load('./', 'custom', path='YOLOv5_new.pt', source='local')
     model = torch.hub.load('./', 'custom', path='yolov5v3.pt', source='local')
+    model.conf = 0.6
     return model
 
 def draw_own_bbox(img,x1,y1,x2,y2,label,color=(36,255,12),text_color=(0,0,0)):
@@ -161,7 +162,7 @@ def predict_image(image, model, signal):
 
         # Filter out Bullseye
         pred_list = df_results 
-        pred_list = pred_list[pred_list['name'] != 'Bullseye']
+        # pred_list = pred_list[pred_list['name'] != 'Bullseye']
         
         # Initialize prediction to NA
         pred = 'NA'
@@ -208,11 +209,11 @@ def predict_image(image, model, signal):
                 # If signal is 'C', choose the prediction that is central in the image
                 else:
                     # Loop through the predictions shortlist
-                    for i in range(len(pred_shortlist)):
-                        # If the xmin of the prediction is between 250 and 774, i.e. the center of the image, choose that prediction
-                        if pred_shortlist[i]['xmin'] > 250 and pred_shortlist[i]['xmin'] < 774:
-                            pred = pred_shortlist[i]
-                            break
+                    # for i in range(len(pred_shortlist)):
+                    #     # If the xmin of the prediction is between 250 and 774, i.e. the center of the image, choose that prediction
+                    #     if pred_shortlist[i]['xmin'] > 250 and pred_shortlist[i]['xmin'] < 774:
+                    #         pred = pred_shortlist[i]
+                    #         break
                     
                     # If no prediction is central, choose the one with the largest area
                     if isinstance(pred,str):
