@@ -30,8 +30,12 @@ def load_model():
     """
     Load the model from the local directory
     """
-    #model = torch.hub.load('./', 'custom', path='YOLOv5_new.pt', source='local')
-    model = torch.hub.load('./', 'custom', path='yolov5v3.pt', source='local')
+    #week 8
+    model = torch.hub.load('./', 'custom', path='yolov5week8.pt', source='local')
+
+    #week 9
+    # model = torch.hub.load('./', 'custom', path='yolov5week9.pt', source='local')
+
     model.conf = 0.6
     return model
 
