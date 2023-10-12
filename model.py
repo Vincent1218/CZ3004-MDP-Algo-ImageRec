@@ -10,6 +10,7 @@ import string
 import numpy as np
 import random
 
+
 def get_random_string(length):
     """
     Generate a random string of fixed length 
@@ -23,23 +24,27 @@ def get_random_string(length):
     str - random string
 
     """
-    result_str = ''.join(random.choice(string.ascii_letters) for i in range(length))
+    result_str = ''.join(random.choice(string.ascii_letters)
+                         for i in range(length))
     return result_str
+
 
 def load_model():
     """
     Load the model from the local directory
     """
-    #week 8
-    model = torch.hub.load('./', 'custom', path='yolov5test2.pt', source='local')
+    # week 8
+    model = torch.hub.load(
+        './', 'custom', path='yolov5test2.pt', source='local')
 
-    #week 9
+    # week 9
     # model = torch.hub.load('./', 'custom', path='yolov5week9.pt', source='local')
 
     model.conf = 0.6
     return model
 
-def draw_own_bbox(img,x1,y1,x2,y2,label,color=(36,255,12),text_color=(0,0,0)):
+
+def draw_own_bbox(img, x1, y1, x2, y2, label, color=(36, 255, 12), text_color=(0, 0, 0)):
     """
     Draw bounding box on the image with text label and save both the raw and annotated image in the 'own_results' folder
 
@@ -122,9 +127,10 @@ def draw_own_bbox(img,x1,y1,x2,y2,label,color=(36,255,12),text_color=(0,0,0)):
     img = cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
     # For the text background, find space required by the text so that we can put a background with that amount of width.
     (w, h), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 1)
-    # Print the text  
+    # Print the text
     img = cv2.rectangle(img, (x1, y1 - 20), (x1 + w, y1), color, -1)
-    img = cv2.putText(img, label, (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, text_color, 1)
+    img = cv2.putText(img, label, (x1, y1 - 5),
+                      cv2.FONT_HERSHEY_SIMPLEX, 0.6, text_color, 1)
     # Save the annotated image
     cv2.imwrite(f"own_results/annotated_image_{label}_{rand}.jpg", img)
 
@@ -132,7 +138,7 @@ def draw_own_bbox(img,x1,y1,x2,y2,label,color=(36,255,12),text_color=(0,0,0)):
 def predict_image(image, model, signal):
     """
     Predict the image using the model and save the results in the 'runs' folder
-    
+
     Inputs
     ------
     image: str - name of the image file
@@ -165,15 +171,15 @@ def predict_image(image, model, signal):
         df_results = df_results.sort_values('bboxArea', ascending=False)
 
         # Filter out Bullseye
-        pred_list = df_results 
+        pred_list = df_results
         # pred_list = pred_list[pred_list['name'] != 'Bullseye']
 
         # if there's no prediction bounding box, save in another directory
-        if len(pred_list) != 0:
-            results.save('runs')
-        else:
+        if len(pred_list) == 0:
             results.save('runfails')
-        
+        else:
+            results.save('runs')
+
         # Initialize prediction to NA
         pred = 'NA'
 
@@ -195,7 +201,7 @@ def predict_image(image, model, signal):
                     pred_shortlist.append(row)
                     # Update the current area to the area of the prediction
                     current_area = row['bboxArea']
-            
+
             # If only 1 prediction remains after filtering by confidence and area
             if len(pred_shortlist) == 1:
                 # Choose that prediction
@@ -203,19 +209,19 @@ def predict_image(image, model, signal):
 
             # If multiple predictions remain after filtering by confidence and area
             else:
-                # Use signal of {signal} to filter further 
-                
+                # Use signal of {signal} to filter further
+
                 # Sort the predictions by xmin
                 pred_shortlist.sort(key=lambda x: x['xmin'])
 
                 # If signal is 'L', choose the first prediction in the list, i.e. leftmost in the image
                 if signal == 'L':
                     pred = pred_shortlist[0]
-                
+
                 # If signal is 'R', choose the last prediction in the list, i.e. rightmost in the image
                 elif signal == 'R':
                     pred = pred_shortlist[-1]
-                
+
                 # If signal is 'C', choose the prediction that is central in the image
                 else:
                     # Loop through the predictions shortlist
@@ -224,16 +230,17 @@ def predict_image(image, model, signal):
                     #     if pred_shortlist[i]['xmin'] > 250 and pred_shortlist[i]['xmin'] < 774:
                     #         pred = pred_shortlist[i]
                     #         break
-                    
+
                     # If no prediction is central, choose the one with the largest area
-                    if isinstance(pred,str):
+                    if isinstance(pred, str):
                         # Choosing one with largest area if none are central
-                        pred_shortlist.sort(key=lambda x: x['bboxArea']) 
+                        pred_shortlist.sort(key=lambda x: x['bboxArea'])
                         pred = pred_shortlist[-1]
-        
+
         # Draw the bounding box on the image
-        if not isinstance(pred,str):
-            draw_own_bbox(np.array(img), pred['xmin'], pred['ymin'], pred['xmax'], pred['ymax'], pred['name'])
+        if not isinstance(pred, str):
+            draw_own_bbox(np.array(
+                img), pred['xmin'], pred['ymin'], pred['xmax'], pred['ymax'], pred['name'])
 
         name_to_id = {
             "NA": 'NA',
@@ -274,7 +281,7 @@ def predict_image(image, model, signal):
             "Stop": 40
         }
         # If pred is not a string, i.e. a prediction was made and pred is not 'NA'
-        if not isinstance(pred,str):
+        if not isinstance(pred, str):
             # image_id = str(name_to_id[pred['name']])
             image_id = str(pred['name'])
         else:
@@ -285,6 +292,7 @@ def predict_image(image, model, signal):
     except:
         print(f"Final result: NA")
         return 'NA'
+
 
 def predict_image_week_9(image, model):
     # Load the image
@@ -302,20 +310,21 @@ def predict_image_week_9(image, model):
 
     # Label with largest bbox height will be last
     df_results = df_results.sort_values('bboxArea', ascending=False)
-    pred_list = df_results 
+    pred_list = df_results
     pred = 'NA'
     # If prediction list is not empty
     if pred_list.size != 0:
         # Go through the predictions, and choose the first one with confidence > 0.5
         for _, row in pred_list.iterrows():
             if row['name'] != 'Bullseye' and row['confidence'] > 0.5:
-                pred = row    
+                pred = row
                 break
 
-        # Draw the bounding box on the image 
-        if not isinstance(pred,str):
-            draw_own_bbox(np.array(img), pred['xmin'], pred['ymin'], pred['xmax'], pred['ymax'], pred['name'])
-        
+        # Draw the bounding box on the image
+        if not isinstance(pred, str):
+            draw_own_bbox(np.array(
+                img), pred['xmin'], pred['ymin'], pred['xmax'], pred['ymax'], pred['name'])
+
     # Dictionary is shorter as only two symbols, left and right are needed
     name_to_id = {
         "NA": 'NA',
@@ -326,7 +335,7 @@ def predict_image_week_9(image, model):
         "Left Arrow": 39,
     }
     # Return the image id
-    if not isinstance(pred,str):
+    if not isinstance(pred, str):
         image_id = str(name_to_id[pred['name']])
     else:
         image_id = 'NA'
@@ -361,11 +370,17 @@ def stitch_image():
     stitchedImg.save(stitchedPath)
 
     # Move original images to "originals" subdirectory
+    current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     for img in imgPaths:
         shutil.move(img, os.path.join(
-            "runs", "originals", os.path.basename(img)))
+            "runs", "originals", current_time, os.path.basename(img)))
+
+    # Delete all folders under "detect" folder
+    for folder in os.listdir(os.path.join("runs", "detect")):
+        shutil.rmtree(os.path.join("runs", "detect", folder))
 
     return stitchedImg
+
 
 def stitch_image_own():
     """
@@ -378,8 +393,9 @@ def stitch_image_own():
 
     imgPaths = glob.glob(os.path.join(imgFolder+"/annotated_image_*.jpg"))
     imgTimestamps = [imgPath.split("_")[-1][:-4] for imgPath in imgPaths]
-    
-    sortedByTimeStampImages = sorted(zip(imgPaths, imgTimestamps), key=lambda x: x[1])
+
+    sortedByTimeStampImages = sorted(
+        zip(imgPaths, imgTimestamps), key=lambda x: x[1])
 
     images = [Image.open(x[0]) for x in sortedByTimeStampImages]
     width, height = zip(*(i.size for i in images))
@@ -394,4 +410,3 @@ def stitch_image_own():
     stitchedImg.save(stitchedPath)
 
     return stitchedImg
-
