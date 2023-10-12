@@ -170,9 +170,9 @@ def predict_image(image, model, signal):
 
         # if there's no prediction bounding box, save in another directory
         if len(pred_list) != 0:
-            results.save('runfails')
-        else:
             results.save('runs')
+        else:
+            results.save('runfails')
         
         # Initialize prediction to NA
         pred = 'NA'
