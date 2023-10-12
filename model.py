@@ -176,9 +176,9 @@ def predict_image(image, model, signal):
 
         # if there's no prediction bounding box, save in another directory
         if len(pred_list) == 0:
-            results.save('runfails')
+            results.save(save_dir='runfails/detect/exp')
         else:
-            results.save('runs')
+            results.save(save_dir='runs/detect/exp')
 
         # Initialize prediction to NA
         pred = 'NA'
@@ -371,9 +371,10 @@ def stitch_image():
 
     # Move original images to "originals" subdirectory
     current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    # os.makedirs(os.path.join("runs", "originals", current_time), exist_ok=True)
     for img in imgPaths:
         shutil.move(img, os.path.join(
-            "runs", "originals", current_time, os.path.basename(img)))
+            "runs", "originals", os.path.basename(img)))
 
     # Delete all folders under "detect" folder
     for folder in os.listdir(os.path.join("runs", "detect")):
