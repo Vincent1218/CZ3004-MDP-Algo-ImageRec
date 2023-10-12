@@ -31,7 +31,7 @@ def load_model():
     Load the model from the local directory
     """
     #week 8
-    model = torch.hub.load('./', 'custom', path='yolov5week8.pt', source='local')
+    model = torch.hub.load('./', 'custom', path='yolov5test2.pt', source='local')
 
     #week 9
     # model = torch.hub.load('./', 'custom', path='yolov5week9.pt', source='local')
@@ -153,7 +153,7 @@ def predict_image(image, model, signal):
         results = model(img)
 
         # Images with predicted bounding boxes are saved in the runs folder
-        results.save('runs')
+        # results.save('runs')
 
         # Convert the results to a pandas dataframe and calculate the height and width of the bounding box and the area of the bounding box
         df_results = results.pandas().xyxy[0]
@@ -167,6 +167,12 @@ def predict_image(image, model, signal):
         # Filter out Bullseye
         pred_list = df_results 
         # pred_list = pred_list[pred_list['name'] != 'Bullseye']
+
+        # if there's no prediction bounding box, save in another directory
+        if len(pred_list) != 0:
+            results.save('runfails')
+        else:
+            results.save('runs')
         
         # Initialize prediction to NA
         pred = 'NA'
