@@ -35,7 +35,7 @@ def load_model():
     """
     # week 8
     model = torch.hub.load(
-        './', 'custom', path='yolov5test2.pt', source='local')
+        './', 'custom', path='yolov5week9.pt', source='local')
 
     # week 9
     # model = torch.hub.load('./', 'custom', path='yolov5week9.pt', source='local')
@@ -300,7 +300,7 @@ def predict_image_week_9(image, model):
     # Run inference
     results = model(img)
     # Save the results
-    results.save('runs')
+    # results.save('runs')
     # Convert the results to a dataframe
     df_results = results.pandas().xyxy[0]
     # Calculate the height and width of the bounding box and the area of the bounding box
@@ -312,11 +312,20 @@ def predict_image_week_9(image, model):
     df_results = df_results.sort_values('bboxArea', ascending=False)
     pred_list = df_results
     pred = 'NA'
+
+    # if there's no prediction bounding box, save in another directory
+    if len(pred_list) == 0:
+        results.save(save_dir='runfails/detect/exp')
+    else:
+        results.save(save_dir='runs/detect/exp')
+
     # If prediction list is not empty
     if pred_list.size != 0:
         # Go through the predictions, and choose the first one with confidence > 0.5
         for _, row in pred_list.iterrows():
-            if row['name'] != 'Bullseye' and row['confidence'] > 0.5:
+
+            # IGNORE BULLSEYE
+            if row['name'] != '99' and row['confidence'] > 0.5:
                 pred = row
                 break
 
@@ -336,9 +345,15 @@ def predict_image_week_9(image, model):
     }
     # Return the image id
     if not isinstance(pred, str):
-        image_id = str(name_to_id[pred['name']])
+        # image_id = str(name_to_id[pred['name']])
+        image_id = str(pred['name'])
     else:
         image_id = 'NA'
+
+    if image_id == '38':
+        print(f"Final result: {image_id}, RIGHT ARROW")
+    elif image_id == '39':
+        print(f"Final result: {image_id}, LEFT ARROW")
     return image_id
 
 
