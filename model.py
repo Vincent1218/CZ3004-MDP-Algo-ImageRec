@@ -35,7 +35,7 @@ def load_model():
     """
     # week 8
     model = torch.hub.load(
-        './', 'custom', path='yolov5week9.pt', source='local')
+        './', 'custom', path='yolov5test2.pt', source='local')
 
     # week 9
     # model = torch.hub.load('./', 'custom', path='yolov5week9.pt', source='local')
